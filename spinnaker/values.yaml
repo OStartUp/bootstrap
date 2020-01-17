@@ -1,5 +1,0 @@
- additionalServiceSettings:
-    deck.yml:
-      kubernetes:
-          securityContext:
-            runAsUser: 0

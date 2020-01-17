@@ -1,4 +1,0 @@
-#!/bin/sh
-
-kind delete cluster --name kind
-docker kill kind-registry

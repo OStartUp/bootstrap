@@ -6,8 +6,9 @@ KIND_CLUSTER_NAME="${KIND_CLUSTER_NAME:-kind}"
 KUBERNETES_NODE_IMAGE=kindest/node:v1.15.7
 
 # create registry container unless it already exists
-reg_name='doc'
+reg_name='kind-registry'
 reg_port='5000'
+docker rm  -f $reg_name || true
 running="$(docker inspect -f '{{.State.Running}}' "${reg_name}" 2>/dev/null || true)"
 if [ "${running}" != 'true' ]; then
   docker run \

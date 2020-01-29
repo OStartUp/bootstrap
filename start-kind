@@ -6,15 +6,15 @@ KIND_CLUSTER_NAME="${KIND_CLUSTER_NAME:-kind}"
 KUBERNETES_NODE_IMAGE=kindest/node:v1.15.7
 
 # create registry container unless it already exists
-reg_name='kind-registry'
-reg_port='5000'
-docker rm  -f $reg_name || true
-running="$(docker inspect -f '{{.State.Running}}' "${reg_name}" 2>/dev/null || true)"
-if [ "${running}" != 'true' ]; then
-  docker run \
-    -d --restart=always -p "${reg_port}:5000" --name "${reg_name}" \
-    registry:2
-fi
+# reg_name='kind-registry'
+# reg_port='5000'
+# docker rm  -f $reg_name || true
+# running="$(docker inspect -f '{{.State.Running}}' "${reg_name}" 2>/dev/null || true)"
+# if [ "${running}" != 'true' ]; then
+#   docker run \
+#     -d --restart=always -p "${reg_port}:5000" --name "${reg_name}" \
+#     registry:2
+# fi
 
 # create a cluster with the local registry enabled in containerd
 cat <<EOF | kind create cluster --name "${KIND_CLUSTER_NAME}" --image=$KUBERNETES_NODE_IMAGE --config=-
@@ -26,15 +26,15 @@ nodes:
   - role: worker
   - role: worker
   - role: worker
-containerdConfigPatches: 
-- |-
-  [plugins."io.containerd.grpc.v1.cri".registry.mirrors."registry:${reg_port}"]
-    endpoint = ["http://registry:${reg_port}"]
+# containerdConfigPatches: 
+# - |-
+#   [plugins."io.containerd.grpc.v1.cri".registry.mirrors."registry:${reg_port}"]
+#     endpoint = ["http://registry:${reg_port}"]
 EOF
 
-# add the registry to /etc/hosts on each node
-ip_fmt='{{.NetworkSettings.IPAddress}}'
-cmd="echo $(docker inspect -f "${ip_fmt}" "${reg_name}") registry >> /etc/hosts"
-for node in $(kind get nodes --name "${KIND_CLUSTER_NAME}"); do
-  docker exec "${node}" sh -c "${cmd}"
-done
+# # add the registry to /etc/hosts on each node
+# ip_fmt='{{.NetworkSettings.IPAddress}}'
+# cmd="echo $(docker inspect -f "${ip_fmt}" "${reg_name}") registry >> /etc/hosts"
+# for node in $(kind get nodes --name "${KIND_CLUSTER_NAME}"); do
+#   docker exec "${node}" sh -c "${cmd}"
+# done

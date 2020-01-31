@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: dashboard
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/add-base-url: "true"
+spec:
+  rules:
+  - host: localhost
+    http:
+      paths:
+      - path: /dashboard
+        backend:
+          serviceName: cdplatform-kubernetes-dashboard #{{ .Chart.Name }}-jenkins
+          servicePort: 8080

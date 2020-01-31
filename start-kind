@@ -38,3 +38,8 @@ EOF
 # for node in $(kind get nodes --name "${KIND_CLUSTER_NAME}"); do
 #   docker exec "${node}" sh -c "${cmd}"
 # done
+kubectl apply -f nginx-ingress-controller.yaml
+sleep 120
+kubectl port-forward -n ingress-nginx  svc/ingress-nginx 8080:80 &
+kubectl port-forward -n ingress-nginx  svc/ingress-nginx 8443:443 &
+kubectl proxy &

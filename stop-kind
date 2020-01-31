@@ -1,4 +1,4 @@
 #!/bin/sh
-
+killall kubectl
 kind delete cluster --name kind
 # docker kill kind-registry

@@ -3,6 +3,10 @@ help:
 	@echo "make kind"
 	@echo "make package"
 	@echo "make install"
+	@echo "make upgrade"
+	@echo "--------------"
+	@echo "make list"
+	@echo "make yoken"
 	@echo "--------------"
 	@echo "make kinddown"
 	@echo "make uninstall"
@@ -11,6 +15,9 @@ help:
 
 kind:
 	./start-kind
+
+token:
+	kubectl get secret $(kubectl get sa cdplatform-kubernetes-dashboard -n $(NAMESPACE) -o jsonpath='{.secrets[0].name}') -n $(NAMESPACE) -o jsonpath='{.data.token}' | base64 -d
 
 kinddown:
 	./stop-kind
@@ -21,23 +28,34 @@ package: cd-platform
 	cd cd-platform ; helm package cd-platform
 
 install:
-	kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/mandatory.yaml
-	kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/baremetal/service-nodeport.yaml
-	cd cd-platform ; helm install --debug --namespace $(NAMESPACE) cdplatform cd-platform-0.1.0.tgz --timeout 600s -f parameters.yaml --set jenkins.master.jenkinsUrl=http://localhost:8001/api/v1/namespaces/$(NAMESPACE)/services/http:cdplatform-jenkins:8080/proxy/
+	@rm -f /tmp/cdplatform.yaml
+	helm template cdplatform cd-platform/cd-platform-0.1.0.tgz -n $(NAMESPACE) -f cd-platform/parameters.yaml  > /tmp/cdplatform.yaml
+	kubectl apply -n $(NAMESPACE) -f /tmp/cdplatform.yaml
+	# cd cd-platform ; helm install --debug -n $(NAMESPACE) cdplatform cd-platform-0.1.0.tgz --timeout 600s -f parameters.yaml 
 	cd cd-platform ; ./postdeploy.sh $(NAMESPACE)
+
 upgrade:
-	cd cd-platform ; helm upgrade --debug --namespace $(NAMESPACE) cdplatform cd-platform-0.1.0.tgz --timeout 600s -f parameters.yaml --set jenkins.master.jenkinsUrl=http://localhost:8001/api/v1/namespaces/$(NAMESPACE)/services/http:cdplatform-jenkins:8080/proxy/
+	@rm -f /tmp/cdplatform.yaml
+	helm template cdplatform cd-platform/cd-platform-0.1.0.tgz -n $(NAMESPACE)  -f cd-platform/parameters.yaml > /tmp/cdplatform.yaml
+	kubectl apply -n $(NAMESPACE) -f /tmp/cdplatform.yaml
+	# cd cd-platform ; helm upgrade --install --debug -n $(NAMESPACE) cdplatform cd-platform-0.1.0.tgz --timeout 600s -f parameters.yaml 
 	cd cd-platform ; ./postdeploy.sh $(NAMESPACE)
 
 uninstall:
-	kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/baremetal/service-nodeport.yaml
-	kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/mandatory.yaml
-	cd cd-platform ; helm uninstall  --namespace $(NAMESPACE) cdplatform cd-platform-0.1.0.tgz
+	@rm -f /tmp/cdplatform.yaml
+	helm template cdplatform cd-platform/cd-platform-0.1.0.tgz -n $(NAMESPACE)  -f cd-platform/parameters.yaml  > /tmp/cdplatform.yaml
+	@kubectl delete -n $(NAMESPACE) -f /tmp/cdplatform.yaml
+	@kubectl delete deployment  -n $(NAMESPACE) -l release=cdplatform
+	@kubectl delete svc         -n $(NAMESPACE) -l release=cdplatform
+	@kubectl delete ingress     -n $(NAMESPACE) -l release=cdplatform
+	@kubectl delete statefulset -n $(NAMESPACE) -l release=cdplatform
 
 postdeploy:
 	cd cd-platform ; ./postdeploy.sh $(NAMESPACE)
 
+list:
+	helm list --all-namespaces
 
-	
+.PHONY: help kind kinddown package install uninstall postdeploy list
 
-.PHONY: help kind kinddown package install uninstall postdeploy values
+# kubectl wait --for=condition=Ready pod/busybox1

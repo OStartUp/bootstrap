@@ -10,8 +10,8 @@ echo ""
 echo "Waiting for Spinnaker"
 sleep 20
 kubectl wait pod -l app=spin --for=condition=Ready -n $NAMESPACE --timeout=300s
-kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config security ui edit --override-base-url http://localhost:8001/api/v1/namespaces/$NAMESPACE/services/http:spin-deck:9000/proxy/
-kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config security api edit --override-base-url http://localhost:8001/api/v1/namespaces/$NAMESPACE/services/http:spin-gate:8084/proxy/
+# kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config security ui edit #--override-base-url http://localhost:8001/api/v1/namespaces/$NAMESPACE/services/http:spin-deck:9000/proxy/
+# kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config security api edit# --override-base-url http://localhost:8001/api/v1/namespaces/$NAMESPACE/services/http:spin-gate:8084/proxy/
 kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal deploy apply
 
 echo "------------------"

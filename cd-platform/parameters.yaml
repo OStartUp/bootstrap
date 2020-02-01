@@ -1,15 +1,2 @@
-spinnaker:
-  halyard:
-    additionalServiceSettings:
-      deck.yml:
-        env:
-            API_HOST: http://spinnaker:8080/
-        kubernetes:
-          securityContext:
-            runAsUser: 0
-## Kubernetes Dashboard
-kubernetes-dashboard:
-  rbac:
-    create: true
-    clusterAdminRole: true
 
+dummy: dummy

@@ -24,6 +24,7 @@ kubectl get secret $(kubectl get sa cdplatform-kubernetes-dashboard -n $NAMESPAC
 echo "Waiting for Jenkins"
 kubectl wait pod -l "app.kubernetes.io/component=jenkins-master" --for=condition=Ready -n $NAMESPACE --timeout=300s
 
-echo "Jenkins admin password: tMj3P9BTTq"
-echo "Jenkins url http://localhost:8080/jenkins/"
-echo "spinnaker url http://localhost:8080/jenkins/"
+echo "Jenkins admin password: admin"
+echo "Jenkins url:      http://localhost:8080/jenkins/"
+echo "K8sDashboard url: http://localhost:8080/"
+echo "Spinnaker url:    http://spinnaker:8080/spinnaker/"

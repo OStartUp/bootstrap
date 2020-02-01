@@ -65,11 +65,66 @@ tolerations: []
 
 affinity: {}
 
+
+spinnaker:
+  ingress:
+    enabled: true
+      host: spinnaker
+    # annotations:
+      # ingress.kubernetes.io/ssl-redirect: 'true'
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+    # tls:
+    #  - secretName: -tls
+    #    hosts:
+    #      - domain.com
+
+  ingressGate:
+    enabled: true
+
 jenkins:
   fullnameOverride: jenkins
   master:
     jenkinsUriPrefix: "/jenkins"
+    adminPassword: "admin"
     ingress:
       enabled: true
       path: "/jenkins"
       hostName: "localhost"
+
+kubernetes-dashboard:
+  enableInsecureLogin: false
+  ingress:
+    ## If true, Kubernetes Dashboard Ingress will be created.
+    ##
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      #nginx.ingress.kubernetes.io/rewrite-target: /
+      kubernetes.io/tls-acme: 'true'
+    ## If you plan to use TLS backend with enableInsecureLogin set to false
+    ## (default), you need to uncomment the below.
+    ## If you use ingress-nginx < 0.21.0
+    #   nginx.ingress.kubernetes.io/secure-backends: "true"
+    ## if you use ingress-nginx >= 0.21.0
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+
+
+    paths:
+      - /
+    #  - /*
+
+    ## Kubernetes Dashboard Ingress hostnames
+    ## Must be provided if Ingress is enabled
+    ##
+    hosts:
+      - localhost
+
+    ## Kubernetes Dashboard Ingress TLS configuration
+    ## Secrets must be manually created in the namespace
+    ##
+    # tls:
+    #   - secretName: kubernetes-dashboard-tls
+    #     hosts:
+    #       - kubernetes-dashboard.domain.com
+

@@ -3,7 +3,7 @@ spinnaker:
     additionalServiceSettings:
       deck.yml:
         env:
-            API_HOST: http://localhost:8001/api/v1/namespaces/spinnaker/services/http:spin-gate:8084/proxy/
+            API_HOST: http://spinnaker:8080/
         kubernetes:
           securityContext:
             runAsUser: 0
@@ -13,6 +13,3 @@ kubernetes-dashboard:
     create: true
     clusterAdminRole: true
 
-# jenkins:
-#   master:
-#     jenkinsUriPrefix: /api/v1/namespaces/{{ Value.Release }}/services/http:cdplatform-jenkins:8080/proxy

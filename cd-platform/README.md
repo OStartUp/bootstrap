@@ -11,10 +11,14 @@ helm package cd-platform
 
 ## Install
 
+Add the following new hosts
+``` 
+127.0.0.1   spinnaker
+```
+
 ```
 kubectl create namespace kube-system
 helm install --debug --namespace kube-system cdplatform cd-platform-0.1.0.tgz --timeout 600s -f parameters.yaml
-
 ```
 
 ## Postdeploy

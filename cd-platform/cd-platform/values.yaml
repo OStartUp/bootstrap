@@ -81,6 +81,15 @@ spinnaker:
 
   ingressGate:
     enabled: true
+    host: spinnakergate
+  # annotations:
+    # ingress.kubernetes.io/ssl-redirect: 'true'
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  # tls:
+  #  - secretName: -tls
+  #    hosts:
+  #      - domain.com
   halyard:
     additionalServiceSettings:
       deck.yml:

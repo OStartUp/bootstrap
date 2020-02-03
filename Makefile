@@ -6,7 +6,8 @@ help:
 	@echo "make upgrade"
 	@echo "--------------"
 	@echo "make list"
-	@echo "make yoken"
+	@echo "make token"
+	@echo "make prune"
 	@echo "--------------"
 	@echo "make kinddown"
 	@echo "make uninstall"
@@ -15,6 +16,11 @@ help:
 
 kind:
 	./start-kind
+	
+prune:
+	docker container prune
+	docker image prune -a
+	docker system prune --volumes
 
 token:
 	@echo ""

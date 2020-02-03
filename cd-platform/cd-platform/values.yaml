@@ -108,6 +108,8 @@ jenkins:
       enabled: true
       path: "/jenkins"
       hostName: "localhost"
+  agent:
+    image: kkarty/jnlp-slave-python3.7
 
 kubernetes-dashboard:
   rbac:

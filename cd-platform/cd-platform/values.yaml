@@ -94,7 +94,7 @@ spinnaker:
     additionalServiceSettings:
       deck.yml:
         env:
-            API_HOST: http://spinnaker:8080/
+            API_HOST: http://spinnakergate:8080/
         kubernetes:
           securityContext:
             runAsUser: 0

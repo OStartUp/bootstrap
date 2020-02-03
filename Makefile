@@ -17,8 +17,9 @@ kind:
 	./start-kind
 
 token:
-	kubectl get secret $(kubectl get sa cdplatform-kubernetes-dashboard -n $(NAMESPACE) -o jsonpath='{.secrets[0].name}') -n $(NAMESPACE) -o jsonpath='{.data.token}' | base64 -d
-
+	@echo ""
+	@kubectl get secret $$(kubectl get sa cdplatform-kubernetes-dashboard -n $(NAMESPACE) -o jsonpath='{.secrets[0].name}') -n $(NAMESPACE) -o jsonpath='{.data.token}' | base64 -d
+	@echo ""
 kinddown:
 	./stop-kind
 

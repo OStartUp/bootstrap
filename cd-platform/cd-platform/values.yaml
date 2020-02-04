@@ -111,6 +111,13 @@ jenkins:
   agent:
     image: marcecaro/jnlp-slave-python3-sudo
     tag: "latest"
+    resources:
+      requests:
+        cpu: "2000m"
+        memory: "1512Mi"
+      limits:
+        cpu: "2000m"
+        memory: "1512Mi"
 
 kubernetes-dashboard:
   rbac:

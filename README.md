@@ -20,13 +20,15 @@ helm version
 make kind
 make package
 make install
-kubectl proxy &
 ```
 
-(Not needed!!) Remember to add registry in /etc/hosts:
+Remember to add registry in /etc/hosts:
 ```
-127.0.0.1       localhost proxy registry
+127.0.0.1       localhost  spinnaker spinnakergate
 ```
+
+
+
 
 ## URLs and Token
 

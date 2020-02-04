@@ -109,7 +109,8 @@ jenkins:
       path: "/jenkins"
       hostName: "localhost"
   agent:
-    image: kkarty/jnlp-slave-python3.7
+    image: marcecaro/jnlp-slave-python3-sudo
+    tag: "latest"
 
 kubernetes-dashboard:
   rbac:

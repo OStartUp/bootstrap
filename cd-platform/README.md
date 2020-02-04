@@ -27,6 +27,13 @@ helm install --debug --namespace kube-system cdplatform cd-platform-0.1.0.tgz --
 ./postdeploy.sh
 ```
 
+## Jenkins configuration
+
+```
+https://github.com/OStartUp/universe.git
+```
+
+
 ### URLS
 
 Get Dashboard token

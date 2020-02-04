@@ -28,6 +28,9 @@ kubectl get secret $(kubectl get sa cdplatform-kubernetes-dashboard -n $NAMESPAC
 echo "Waiting for Jenkins"
 kubectl wait pod -l "app.kubernetes.io/component=jenkins-master" --for=condition=Ready -n $NAMESPACE --timeout=300s
 
+echo "Cleaning tests pods"
+kubectl get pods -n mynamespace -n $NAMESPACE -o=name| grep test | xargs kubectl delete -n $NAMESPACE
+
 echo "Jenkins admin password: admin"
 echo "Jenkins url:      http://localhost:8080/jenkins/"
 echo "K8sDashboard url: http://localhost:8080/"

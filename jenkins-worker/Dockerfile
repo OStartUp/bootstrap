@@ -32,7 +32,17 @@ USER root
 RUN apt-get clean
 RUN adduser jenkins sudo
 RUN passwd -d jenkins
+RUN apt-get install -y graphviz
 
+# Installing BAZEL
+RUN curl -fsSL -o bazel-2.0.0-installer-linux-x86_64.sh https://releases.bazel.build/2.0.0/release/bazel-2.0.0-installer-linux-x86_64.sh
+RUN chmod +x bazel-2.0.0-installer-linux-x86_64.sh
+RUN ./bazel-2.0.0-installer-linux-x86_64.sh 
+
+# Installing HELM3
+RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+RUN chmod 700 get_helm.sh
+RUN ./get_helm.sh
 
 USER ${user}
 COPY --from=jenkins-base ${AGENT_WORKDIR} ${AGENT_WORKDIR}

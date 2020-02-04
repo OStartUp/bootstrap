@@ -13,6 +13,7 @@ echo ""
 echo "Waiting for Spinnaker"
 sleep 10
 kubectl wait pod cdplatform-spinnaker-halyard-0 --for=condition=Ready -n $NAMESPACE --timeout=300s
+sleep 40
 echo "Post configuration Spinnaker"
 kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config security ui edit --override-base-url  http://spinnaker:8080
 kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config security api edit --override-base-url http://spinnakergate:8080
@@ -31,7 +32,14 @@ kubectl wait pod -l "app.kubernetes.io/component=jenkins-master" --for=condition
 echo "Cleaning tests pods"
 kubectl get pods -n mynamespace -n $NAMESPACE -o=name| grep test | xargs kubectl delete -n $NAMESPACE
 
+
+read -s -p "Docker Hub Token: " DOCKERTOKEN
+read -s -p "Jenkins API Token: " JTOKEN
+sed "s/DOCKERTOKEN/$DOCKERTOKEN/g" CI_Template.xml > CI.xml
+./set_jenkins_config $JTOKEN
+
 echo "Jenkins admin password: admin"
 echo "Jenkins url:      http://localhost:8080/jenkins/"
 echo "K8sDashboard url: http://localhost:8080/"
 echo "Spinnaker url:    http://spinnaker:8080/spinnaker/"
+

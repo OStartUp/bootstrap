@@ -118,6 +118,11 @@ jenkins:
       limits:
         cpu: "2000m"
         memory: "1512Mi"
+    volumes:  ## Enable docker to run inside the build agent
+      - type: HostPath
+        mountPath: /var/run/docker.sock
+        hostPath: /var/run/docker.sock
+    
 
 kubernetes-dashboard:
   rbac:

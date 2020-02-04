@@ -2,8 +2,8 @@
 
 NAMESPACE=$1
 kubectl get secret $(kubectl get sa cdplatform-kubernetes-dashboard -n $NAMESPACE -o jsonpath='{.secrets[0].name}') -n $NAMESPACE -o jsonpath='{.data.token}' | base64 -d 
-set -x
 echo ""
+#set -x
 echo "------------------"
 echo "http://localhost:8001/api/v1/namespaces/$NAMESPACE/services/https:cdplatform-kubernetes-dashboard:443/proxy/"
 echo "http://localhost:8001/api/v1/namespaces/$NAMESPACE/services/http:spin-deck:9000/proxy/"
@@ -11,10 +11,8 @@ echo "http://localhost:8001/api/v1/namespaces/$NAMESPACE/services/http:cdplatfor
 echo ""
 
 echo "Waiting for Spinnaker"
-sleep 60
+sleep 10
 kubectl wait pod cdplatform-spinnaker-halyard-0 --for=condition=Ready -n $NAMESPACE --timeout=300s
-kubectl wait pod -l app=spin --for=condition=Ready -n $NAMESPACE --timeout=300s
-sleep 20
 echo "Post configuration Spinnaker"
 kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config security ui edit --override-base-url  http://spinnaker:8080
 kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config security api edit --override-base-url http://spinnakergate:8080

@@ -118,10 +118,13 @@ jenkins:
       limits:
         cpu: "2000m"
         memory: "1512Mi"
-    volumes:  ## Enable docker to run inside the build agent
-      - type: HostPath
-        mountPath: /var/run/docker.sock
-        hostPath: /var/run/docker.sock
+    # volumes:  ## Enable docker to run inside the build agent
+    #   - type: HostPath
+    #     mountPath: /var/run/docker.sock
+    #     hostPath: /var/run/docker.sock
+    envVars:
+      - name: DOCKER_HOST
+        value: tcp://docker.kube-system.svc.cluster.local:2375
     
 
 kubernetes-dashboard:

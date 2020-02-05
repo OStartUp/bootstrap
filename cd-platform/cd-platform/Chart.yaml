@@ -22,7 +22,7 @@ appVersion: 1.16.0
 
 dependencies:
   - name: spinnaker
-    version: 1.23.0
+    version: 1.23.1
     repository: https://kubernetes-charts.storage.googleapis.com/
   - name: kubernetes-dashboard
     version: 1.10.1

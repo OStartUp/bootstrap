@@ -13,7 +13,7 @@ echo ""
 echo "Waiting for Spinnaker"
 sleep 10
 kubectl wait pod cdplatform-spinnaker-halyard-0 --for=condition=Ready -n $NAMESPACE --timeout=300s
-sleep 40
+sleep 60
 echo "Post configuration Spinnaker"
 kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config security ui edit --override-base-url  http://spinnaker:8080
 kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config security api edit --override-base-url http://spinnakergate:8080

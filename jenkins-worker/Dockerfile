@@ -54,6 +54,8 @@ RUN curl -LO https://storage.googleapis.com/container-structure-test/v1.8.0/cont
 RUN mv container-structure-test-linux-amd64 container-structure-test 
 RUN chmod +x container-structure-test 
 RUN mv container-structure-test /usr/local/bin/
+RUN gpasswd -a jenkins docker
+RUN gpasswd -a root docker
 
 USER ${user}
 COPY --from=jenkins-base ${AGENT_WORKDIR} ${AGENT_WORKDIR}

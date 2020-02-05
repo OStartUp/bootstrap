@@ -34,6 +34,7 @@ kubectl get pods -n mynamespace -n $NAMESPACE -o=name| grep test | xargs kubectl
 
 
 read -s -p "Docker Hub Token: " DOCKERTOKEN
+echo ""
 read -s -p "Jenkins API Token: " JTOKEN
 sed "s/DOCKERTOKEN/$DOCKERTOKEN/g" CI_Template.xml > CI.xml
 ./set_jenkins_config $JTOKEN

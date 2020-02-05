@@ -21,6 +21,7 @@ prune:
 	docker container prune
 	docker image prune -a
 	docker system prune --volumes
+	rm -rf ~/.cache
 
 token:
 	@echo ""
@@ -51,11 +52,11 @@ upgrade:
 uninstall:
 	@rm -f /tmp/cdplatform.yaml
 	helm template cdplatform cd-platform/cd-platform-0.1.0.tgz -n $(NAMESPACE)  -f cd-platform/parameters.yaml  > /tmp/cdplatform.yaml
-	@kubectl delete -n $(NAMESPACE) -f /tmp/cdplatform.yaml
-	@kubectl delete deployment  -n $(NAMESPACE) -l release=cdplatform
-	@kubectl delete svc         -n $(NAMESPACE) -l release=cdplatform
-	@kubectl delete ingress     -n $(NAMESPACE) -l release=cdplatform
-	@kubectl delete statefulset -n $(NAMESPACE) -l release=cdplatform
+	-@kubectl delete -n $(NAMESPACE) -f /tmp/cdplatform.yaml || true
+	-@kubectl delete deployment  -n $(NAMESPACE) -l release=cdplatform
+	-@kubectl delete svc         -n $(NAMESPACE) -l release=cdplatform
+	-@kubectl delete ingress     -n $(NAMESPACE) -l release=cdplatform
+	-@kubectl delete statefulset -n $(NAMESPACE) -l release=cdplatform
 
 postdeploy:
 	cd cd-platform ; ./postdeploy.sh $(NAMESPACE)

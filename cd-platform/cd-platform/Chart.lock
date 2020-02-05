@@ -1,12 +1,12 @@
 dependencies:
 - name: spinnaker
   repository: https://kubernetes-charts.storage.googleapis.com/
-  version: 1.23.0
+  version: 1.23.1
 - name: kubernetes-dashboard
   repository: https://kubernetes-charts.storage.googleapis.com/
   version: 1.10.1
 - name: jenkins
   repository: https://kubernetes-charts.storage.googleapis.com/
   version: 1.9.16
-digest: sha256:a95a140defef3ede34045012bdbe716b1a36457494548c37ff15c7ba0cedad60
-generated: "2020-01-17T12:10:39.364397303-08:00"
+digest: sha256:ec271a6c2233c6e93332d14e0236694c66e48fb8586a73faff2b6ec0bb7c70d9
+generated: "2020-02-05T14:16:02.886562063-08:00"

@@ -16,7 +16,12 @@ help:
 
 kind:
 	./start-kind
-	
+
+debug:
+	kubectl delete deployment -l run=busybox
+	kubectl run busybox  --image=radial/busyboxplus:curl -i --tty
+	kubectl delete deployment -l run=busybox
+
 prune:
 	docker container prune
 	docker image prune -a

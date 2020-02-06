@@ -39,6 +39,13 @@ read -s -p "Jenkins API Token: " JTOKEN
 sed "s/DOCKERTOKEN/$DOCKERTOKEN/g" CI_Template.xml > CI.xml
 ./set_jenkins_config $JTOKEN
 
+
+kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config ci jenkins enable
+kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config ci jenkins master add my-jenkins-master --csrf true --address http://jenkins.$NAMESPACE.svc.cluster.local:8080/jenkins/ --username admin --password=$JTOKEN 
+kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal deploy apply
+
+
+
 echo "Jenkins admin password: admin"
 echo "Jenkins url:      http://localhost:8080/jenkins/"
 echo "K8sDashboard url: http://localhost:8080/"

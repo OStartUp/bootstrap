@@ -32,7 +32,7 @@ helm install --debug --namespace kube-system cdplatform cd-platform-0.1.0.tgz --
 ```
 https://github.com/OStartUp/universe.git
 ```
-
+https://www.spinnaker.io/setup/ci/jenkins/#configure-jenkins-and-spinnaker-for-csrf-protection
 
 ### URLS
 

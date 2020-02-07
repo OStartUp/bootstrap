@@ -9,6 +9,10 @@ Bootstrap kind and local tools
 
 ## SETUP
 
+```
+sudo /usr/local/bin/enable_socks_v3.sh restart
+```
+
 Install helm
 ```
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3

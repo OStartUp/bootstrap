@@ -41,10 +41,13 @@ sleep 2
 kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal deploy apply
 sleep 20
 
+
 echo "Waiting for Jenkins"
 kubectl wait pod -l "app.kubernetes.io/component=jenkins-master" --for=condition=Ready -n $NAMESPACE --timeout=300s
 sleep 10
-
+echo ""
+read -s -p "Jenkins API Token: " JTOKEN
+echo ""
 kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config security ui edit --override-base-url  http://spinnaker:8080
 kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config security api edit --override-base-url http://spinnakergate:8080
 kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config ci jenkins enable
@@ -71,12 +74,13 @@ kubectl get pods -n mynamespace -n $NAMESPACE -o=name| grep test | xargs kubectl
 # echo ""
 # read -s -p "Github Token: " GITHUBTOKEN
 # echo ""
-read -s -p "Jenkins API Token: " JTOKEN
 
 
 echo "-- Configuring Jenkins --"
 sed "s/DOCKERTOKEN/$DOCKERTOKEN/g" CI_Template.xml > /tmp/CI.xml
 sed "s/GITHUBTOKEN/$GITHUBTOKEN/g" /tmp/CI.xml > CI.xml
+sed "s/DOCKERTOKEN/$DOCKERTOKEN/g" Tag_Template.xml > /tmp/Tag.xml
+sed "s/GITHUBTOKEN/$GITHUBTOKEN/g" /tmp/Tag.xml > Tag.xml
 ./set_jenkins_config $JTOKEN
 
 

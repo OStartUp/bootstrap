@@ -5,6 +5,7 @@ help:
 	@echo "make install"
 	@echo "make upgrade"
 	@echo "--------------"
+	@echo "make debug"
 	@echo "make list"
 	@echo "make token"
 	@echo "make prune"
@@ -48,6 +49,10 @@ package: cd-platform
 install:  int
 	@rm -f /tmp/cdplatform.yaml
 	#-kubectl config set-cluster kind-production --insecure-skip-tls-verify=true
+	-kubectl create namespace "echo-prod"
+	-kubectl create namespace "pet-prod"
+	-kubectl create namespace "echo"
+	-kubectl create namespace "pet"
 	-cp $$HOME/.kube/config /tmp/config_template
 	-sed "s/127.0.0.1:/kubernetes.default.svc.cluster.local  #/g" /tmp/config_template > /tmp/config
 	-kubectl delete secret my-kubeconfig -n $(NAMESPACE)

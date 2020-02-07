@@ -16,9 +16,11 @@ KUBERNETES_NODE_IMAGE=kindest/node:v1.15.7
 #   - role: worker
 # EOF
 
-production_port=$(kubectl config view | yq  '.clusters[] | select(.name=="kind-kind") | .cluster.server' | cut -d ':' -f 3 | cut -d "\"" -f 1)
+#production_port=$(kubectl config view | yq  '.clusters[] | select(.name=="kind-kind") | .cluster.server' | cut -d ':' -f 3 | cut -d "\"" -f 1)
+
+
 # Createn production cluster
-cat <<EOF | kind create cluster --name "${KIND_CLUSTER_NAME_PROD}" --image=$KUBERNETES_NODE_IMAGE --config=-
+cat <<EOF | kind create cluster --name "${KIND_CLUSTER_NAME}" --image=$KUBERNETES_NODE_IMAGE --config=-
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
@@ -43,12 +45,10 @@ EOF
 
 # PRODUCTION 
 # kubectl config use-context kind-production
-kubectl create namespace "echo_prod"
-kubectl create namespace "pet_prod"
+# kubectl create namespace "echo_prod"
+# kubectl create namespace "pet_prod"
 
 kubectl config use-context kind-kind
-kubectl create namespace "echo"
-kubectl create namespace "pet"
 
 killall kubectl || true
 kubectl apply -f nginx-ingress-controller.yaml

@@ -2,3 +2,4 @@
 set -x
 crumb=$(curl -u "admin:$1" --cookie-jar /tmp/cookiejar -s 'http://localhost:8080/jenkins/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
 curl -sv --cookie /tmp/cookiejar  -XPOST -H "$crumb" http://localhost:8080/jenkins/createItem?name=CI  -u admin:$1  --data-binary @CI.xml -H "Content-Type:text/xml"
+curl -sv --cookie /tmp/cookiejar  -XPOST -H "$crumb" http://localhost:8080/jenkins/createItem?name=Tag  -u admin:$1  --data-binary @Tag.xml -H "Content-Type:text/xml"

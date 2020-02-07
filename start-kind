@@ -6,6 +6,17 @@ KIND_CLUSTER_NAME="${KIND_CLUSTER_NAME:-kind}"
 KIND_CLUSTER_NAME_PROD="${KIND_CLUSTER_NAME_PROD:-production}"
 KUBERNETES_NODE_IMAGE=kindest/node:v1.15.7
 
+# PROD
+# cat <<EOF | kind create cluster --name "${KIND_CLUSTER_NAME}" --image=$KUBERNETES_NODE_IMAGE --config=-
+# kind: Cluster
+# apiVersion: kind.x-k8s.io/v1alpha4
+# nodes:
+#   - role: control-plane
+#   - role: worker
+#   - role: worker
+# EOF
+
+production_port=$(kubectl config view | yq  '.clusters[] | select(.name=="kind-kind") | .cluster.server' | cut -d ':' -f 3 | cut -d "\"" -f 1)
 # Createn production cluster
 cat <<EOF | kind create cluster --name "${KIND_CLUSTER_NAME_PROD}" --image=$KUBERNETES_NODE_IMAGE --config=-
 kind: Cluster
@@ -16,21 +27,12 @@ nodes:
   - role: worker
   - role: worker
   - role: worker
+    # extraPortMappings:
+    #   - containerPort: $production_port
+    #     hostPort: $production_port
 EOF
 
-# create a cluster with the local registry enabled in containerd
-cat <<EOF | kind create cluster --name "${KIND_CLUSTER_NAME}" --image=$KUBERNETES_NODE_IMAGE --config=-
-kind: Cluster
-apiVersion: kind.x-k8s.io/v1alpha4
-nodes:
-  - role: control-plane
-  - role: worker
-  - role: worker
-# containerdConfigPatches: 
-# - |-
-#   [plugins."io.containerd.grpc.v1.cri".registry.mirrors."registry:${reg_port}"]
-#     endpoint = ["http://registry:${reg_port}"]
-EOF
+
 
 # # add the registry to /etc/hosts on each node
 # ip_fmt='{{.NetworkSettings.IPAddress}}'
@@ -39,7 +41,14 @@ EOF
 #   docker exec "${node}" sh -c "${cmd}"
 # done
 
+# PRODUCTION 
+# kubectl config use-context kind-production
+kubectl create namespace "echo_prod"
+kubectl create namespace "pet_prod"
+
 kubectl config use-context kind-kind
+kubectl create namespace "echo"
+kubectl create namespace "pet"
 
 killall kubectl || true
 kubectl apply -f nginx-ingress-controller.yaml

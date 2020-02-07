@@ -2,8 +2,7 @@
 
 echo "Loading Credentials from .credentials"
 . .credentials
-kubectl create namespace "echo"
-kubectl create namespace "pet"
+
 export NAMESPACE=$1
 kubectl get secret $(kubectl get sa cdplatform-kubernetes-dashboard -n $NAMESPACE -o jsonpath='{.secrets[0].name}') -n $NAMESPACE -o jsonpath='{.data.token}' | base64 -d 
 echo ""
@@ -14,19 +13,24 @@ echo "http://localhost:8001/api/v1/namespaces/$NAMESPACE/services/http:spin-deck
 echo "http://localhost:8001/api/v1/namespaces/$NAMESPACE/services/http:cdplatform-jenkins:8080/proxy/"
 echo ""
 
-echo "Waiting for Spinnaker"
+echo "Waiting for Spinnaker-Halyard"
 sleep 10
 kubectl wait pod cdplatform-spinnaker-halyard-0 --for=condition=Ready -n $NAMESPACE --timeout=300s
 sleep 60
+
 echo "Post configuration Spinnaker"
 export ARTIFACT_ACCOUNT_NAME="OStartUp"
 kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config security ui edit --override-base-url  http://spinnaker:8080
 sleep 2
 kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config security api edit --override-base-url http://spinnakergate:8080
 sleep 2
-kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config ci jenkins enable
-sleep 2
-kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config ci jenkins master add my-jenkins-master --csrf true --address http://jenkins.$NAMESPACE.svc.cluster.local:8080/jenkins/ --username admin --password=$JTOKEN 
+kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal deploy apply
+
+echo "Waiting for Spinnaker"
+sleep 10
+kubectl wait pod -l app=spin --for=condition=Ready -n $NAMESPACE --timeout=300s
+
+echo "Reconfiguring for Spinnaker"
 sleep 2
 kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config features edit --artifacts true
 sleep 2
@@ -35,11 +39,19 @@ sleep 2
 kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config artifact github account add $ARTIFACT_ACCOUNT_NAME  --token $GITHUBTOKEN
 sleep 2
 kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal deploy apply
-sleep 5
+sleep 20
+
+echo "Waiting for Jenkins"
+kubectl wait pod -l "app.kubernetes.io/component=jenkins-master" --for=condition=Ready -n $NAMESPACE --timeout=300s
+sleep 10
+
 kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config security ui edit --override-base-url  http://spinnaker:8080
-sleep 2
 kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config security api edit --override-base-url http://spinnakergate:8080
-sleep 2
+kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config ci jenkins enable
+kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config ci jenkins master add my-jenkins-master --csrf true --address http://jenkins.$NAMESPACE.svc.cluster.local:8080/jenkins/ --username admin --password=$JTOKEN 
+
+
+echo "Continue Spinnaker Configuration"
 kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal deploy apply
 
 echo "------------------"
@@ -49,8 +61,7 @@ echo "http://localhost:8001/api/v1/namespaces/$NAMESPACE/services/http:cdplatfor
 
 kubectl get secret $(kubectl get sa cdplatform-kubernetes-dashboard -n $NAMESPACE -o jsonpath='{.secrets[0].name}') -n $NAMESPACE -o jsonpath='{.data.token}' | base64 -d
 echo ""
-echo "Waiting for Jenkins"
-kubectl wait pod -l "app.kubernetes.io/component=jenkins-master" --for=condition=Ready -n $NAMESPACE --timeout=300s
+
 
 echo "Cleaning tests pods"
 kubectl get pods -n mynamespace -n $NAMESPACE -o=name| grep test | xargs kubectl delete -n $NAMESPACE

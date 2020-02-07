@@ -17,7 +17,12 @@ help:
 kind:
 	./start-kind
 
-debug:
+debug: int
+	kubectl delete deployment -l run=busybox
+	kubectl run busybox  --image=radial/busyboxplus:curl -i --tty
+	kubectl delete deployment -l run=busybox
+
+debugprod: prod
 	kubectl delete deployment -l run=busybox
 	kubectl run busybox  --image=radial/busyboxplus:curl -i --tty
 	kubectl delete deployment -l run=busybox
@@ -42,6 +47,7 @@ package: cd-platform
 
 install:  int
 	@rm -f /tmp/cdplatform.yaml
+	#-kubectl config set-cluster kind-production --insecure-skip-tls-verify=true
 	-cp $$HOME/.kube/config /tmp/config_template
 	-sed "s/127.0.0.1:/kubernetes.default.svc.cluster.local  #/g" /tmp/config_template > /tmp/config
 	-kubectl delete secret my-kubeconfig -n $(NAMESPACE)
@@ -54,6 +60,7 @@ install:  int
 prod:
 	@echo "Switching to Production Environment"
 	kubectl config use-context kind-production
+
 
 int:
 	@echo "Switching to Integration Environment"

@@ -2,7 +2,8 @@
 
 echo "Loading Credentials from .credentials"
 . .credentials
-
+kubectl create namespace "echo"
+kubectl create namespace "pet"
 export NAMESPACE=$1
 kubectl get secret $(kubectl get sa cdplatform-kubernetes-dashboard -n $NAMESPACE -o jsonpath='{.secrets[0].name}') -n $NAMESPACE -o jsonpath='{.data.token}' | base64 -d 
 echo ""
@@ -67,8 +68,7 @@ sed "s/DOCKERTOKEN/$DOCKERTOKEN/g" CI_Template.xml > /tmp/CI.xml
 sed "s/GITHUBTOKEN/$GITHUBTOKEN/g" /tmp/CI.xml > CI.xml
 ./set_jenkins_config $JTOKEN
 
-kubectl create namespace "echo"
-kubectl create namespace "pet"
+
 echo "Jenkins admin password: admin"
 echo "Jenkins url:      http://localhost:8080/jenkins/"
 echo "K8sDashboard url: http://localhost:8080/"

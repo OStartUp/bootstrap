@@ -3,18 +3,20 @@ set -o errexit
 
 # desired cluster name; default is "kind"
 KIND_CLUSTER_NAME="${KIND_CLUSTER_NAME:-kind}"
+KIND_CLUSTER_NAME_PROD="${KIND_CLUSTER_NAME_PROD:-production}"
 KUBERNETES_NODE_IMAGE=kindest/node:v1.15.7
 
-# create registry container unless it already exists
-# reg_name='kind-registry'
-# reg_port='5000'
-# docker rm  -f $reg_name || true
-# running="$(docker inspect -f '{{.State.Running}}' "${reg_name}" 2>/dev/null || true)"
-# if [ "${running}" != 'true' ]; then
-#   docker run \
-#     -d --restart=always -p "${reg_port}:5000" --name "${reg_name}" \
-#     registry:2
-# fi
+# Createn production cluster
+cat <<EOF | kind create cluster --name "${KIND_CLUSTER_NAME_PROD}" --image=$KUBERNETES_NODE_IMAGE --config=-
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+  - role: control-plane
+  - role: worker
+  - role: worker
+  - role: worker
+  - role: worker
+EOF
 
 # create a cluster with the local registry enabled in containerd
 cat <<EOF | kind create cluster --name "${KIND_CLUSTER_NAME}" --image=$KUBERNETES_NODE_IMAGE --config=-
@@ -22,8 +24,6 @@ kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
   - role: control-plane
-  - role: worker
-  - role: worker
   - role: worker
   - role: worker
 # containerdConfigPatches: 
@@ -38,6 +38,9 @@ EOF
 # for node in $(kind get nodes --name "${KIND_CLUSTER_NAME}"); do
 #   docker exec "${node}" sh -c "${cmd}"
 # done
+
+kubectl config use-context kind-kind
+
 killall kubectl || true
 kubectl apply -f nginx-ingress-controller.yaml
 kubectl apply -f docker-service.yaml -n kube-system
@@ -45,3 +48,5 @@ sleep 60
 kubectl port-forward -n ingress-nginx  svc/ingress-nginx 8080:80 > /dev/null 2>&1 &
 kubectl port-forward -n ingress-nginx  svc/ingress-nginx 8443:443 > /dev/null 2>&1  &
 kubectl proxy > /dev/null 2>&1 &
+
+

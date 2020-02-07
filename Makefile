@@ -40,10 +40,10 @@ package: cd-platform
 	cd cd-platform/cd-platform ; helm dep up
 	cd cd-platform ; helm package cd-platform
 
-install:
+install:  int
 	@rm -f /tmp/cdplatform.yaml
 	-cp $$HOME/.kube/config /tmp/config_template
-	-sed "s/127.0.0.1:32772/kubernetes.default.svc.cluster.local/g" /tmp/config_template > /tmp/config
+	-sed "s/127.0.0.1:/kubernetes.default.svc.cluster.local  #/g" /tmp/config_template > /tmp/config
 	-kubectl delete secret my-kubeconfig -n $(NAMESPACE)
 	-kubectl create secret generic --from-file=/tmp/config my-kubeconfig -n $(NAMESPACE)
 	helm template cdplatform cd-platform/cd-platform-0.1.0.tgz -n $(NAMESPACE) -f cd-platform/parameters.yaml  > /tmp/cdplatform.yaml
@@ -51,14 +51,23 @@ install:
 	# cd cd-platform ; helm install --debug -n $(NAMESPACE) cdplatform cd-platform-0.1.0.tgz --timeout 600s -f parameters.yaml 
 	cd cd-platform ; ./postdeploy.sh $(NAMESPACE)
 
-upgrade:
+prod:
+	@echo "Switching to Production Environment"
+	kubectl config use-context kind-production
+
+int:
+	@echo "Switching to Integration Environment"
+	kubectl config use-context kind-kind
+
+
+upgrade: int
 	@rm -f /tmp/cdplatform.yaml
 	helm template cdplatform cd-platform/cd-platform-0.1.0.tgz -n $(NAMESPACE)  -f cd-platform/parameters.yaml > /tmp/cdplatform.yaml
 	kubectl apply -n $(NAMESPACE) -f /tmp/cdplatform.yaml
 	# cd cd-platform ; helm upgrade --install --debug -n $(NAMESPACE) cdplatform cd-platform-0.1.0.tgz --timeout 600s -f parameters.yaml 
 	cd cd-platform ; ./postdeploy.sh $(NAMESPACE)
 
-uninstall:
+uninstall: int
 	@rm -f /tmp/cdplatform.yaml
 	helm template cdplatform cd-platform/cd-platform-0.1.0.tgz -n $(NAMESPACE)  -f cd-platform/parameters.yaml  > /tmp/cdplatform.yaml
 	-@kubectl delete -n $(NAMESPACE) -f /tmp/cdplatform.yaml || true
@@ -69,12 +78,12 @@ uninstall:
 	-@kubectl delete statefulset -n $(NAMESPACE) -l app=spin
 	-@kubectl delete deployments -n $(NAMESPACE) -l app=spin
 
-postdeploy:
+postdeploy: int
 	cd cd-platform ; ./postdeploy.sh $(NAMESPACE)
 
 list:
 	helm list --all-namespaces
 
-.PHONY: help kind kinddown package install uninstall postdeploy list
+.PHONY: help kind kinddown package install uninstall postdeploy list int prod
 
 # kubectl wait --for=condition=Ready pod/busybox1

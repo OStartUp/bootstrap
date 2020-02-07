@@ -108,6 +108,7 @@ spinnaker:
     contexts:
       # Names of contexts available in the uploaded kubeconfig
       - kind-kind
+      - kind-production
       # This is the context from the list above that you would like
       # to deploy Spinnaker itself to.
     deploymentContext: kind-kind

@@ -1,0 +1,180 @@
+{
+  "appConfig": {},
+  "expectedArtifacts": [
+    {
+      "defaultArtifact": {
+        "artifactAccount": "OStartUp",
+        "id": "73ed4101-fb6f-4c65-9d3a-453e404644ab",
+        "name": "echo/manifest.yaml",
+        "reference": "https://api.github.com/repos/OStartUp/artifacts/contents/echo/manifest.yaml",
+        "type": "github/file"
+      },
+      "displayName": "echo_manifest",
+      "id": "8c17c717-480e-47d5-b46d-9c3127882af5",
+      "matchArtifact": {
+        "artifactAccount": "OStartUp",
+        "id": "d5fc670a-460f-4cee-934a-ca80ae5e0982",
+        "name": "echo/manifest.yaml",
+        "type": "github/file"
+      },
+      "useDefaultArtifact": true,
+      "usePriorArtifact": false
+    },
+    {
+      "defaultArtifact": {
+        "artifactAccount": "OStartUp",
+        "id": "21978733-1c07-4c3a-8868-2382f0e86195",
+        "name": "pet/manifest.yaml",
+        "reference": "https://api.github.com/repos/OStartUp/artifacts/contents/pet/manifest.yaml",
+        "type": "github/file"
+      },
+      "displayName": "pet_manifest",
+      "id": "6bb47dd9-aa42-4939-8e70-24e46d34e42a",
+      "matchArtifact": {
+        "artifactAccount": "OStartUp",
+        "id": "314a242d-ac59-43cb-90ca-ff91197d7c82",
+        "name": "pet/manifest.yaml",
+        "type": "github/file"
+      },
+      "useDefaultArtifact": true,
+      "usePriorArtifact": false
+    }
+  ],
+  "keepWaitingPipelines": false,
+  "lastModifiedBy": "anonymous",
+  "limitConcurrent": true,
+  "stages": [
+    {
+      "account": "kind-kind",
+      "cloudProvider": "kubernetes",
+      "manifestArtifactAccount": "OStartUp",
+      "manifestArtifactId": "8c17c717-480e-47d5-b46d-9c3127882af5",
+      "moniker": {
+        "app": "mainservice"
+      },
+      "name": "Deploy Echo Service (Integration)",
+      "namespaceOverride": "echo",
+      "refId": "1",
+      "requisiteStageRefIds": [],
+      "skipExpressionEvaluation": false,
+      "source": "artifact",
+      "trafficManagement": {
+        "enabled": false,
+        "options": {
+          "enableTraffic": false,
+          "services": []
+        }
+      },
+      "type": "deployManifest"
+    },
+    {
+      "account": "kind-kind",
+      "cloudProvider": "kubernetes",
+      "manifestArtifactAccount": "OStartUp",
+      "manifestArtifactId": "6bb47dd9-aa42-4939-8e70-24e46d34e42a",
+      "moniker": {
+        "app": "mainservice"
+      },
+      "name": "Deploy Pet Service (Integration)",
+      "namespaceOverride": "pet",
+      "refId": "2",
+      "requisiteStageRefIds": [],
+      "skipExpressionEvaluation": false,
+      "source": "artifact",
+      "trafficManagement": {
+        "enabled": false,
+        "options": {
+          "enableTraffic": false,
+          "services": []
+        }
+      },
+      "type": "deployManifest"
+    },
+    {
+      "failPipeline": true,
+      "instructions": "Is this deployment ready to go to production environment",
+      "judgmentInputs": [],
+      "name": "Production Gate",
+      "notifications": [],
+      "refId": "4",
+      "requisiteStageRefIds": [
+        "1",
+        "2"
+      ],
+      "type": "manualJudgment"
+    },
+    {
+      "account": "kind-kind",
+      "cloudProvider": "kubernetes",
+      "manifestArtifactAccount": "OStartUp",
+      "manifestArtifactId": "8c17c717-480e-47d5-b46d-9c3127882af5",
+      "moniker": {
+        "app": "mainservice"
+      },
+      "name": "Deploy Echo Service (Production)",
+      "namespaceOverride": "echo-prod",
+      "refId": "5",
+      "requisiteStageRefIds": [
+        "4"
+      ],
+      "skipExpressionEvaluation": false,
+      "source": "artifact",
+      "trafficManagement": {
+        "enabled": false,
+        "options": {
+          "enableTraffic": false
+        }
+      },
+      "type": "deployManifest"
+    },
+    {
+      "account": "kind-kind",
+      "cloudProvider": "kubernetes",
+      "manifestArtifactAccount": "OStartUp",
+      "manifestArtifactId": "6bb47dd9-aa42-4939-8e70-24e46d34e42a",
+      "moniker": {
+        "app": "mainservice"
+      },
+      "name": "Deploy Pet Service (Production)",
+      "namespaceOverride": "pet-prod",
+      "refId": "6",
+      "requisiteStageRefIds": [
+        "4"
+      ],
+      "skipExpressionEvaluation": false,
+      "source": "artifact",
+      "trafficManagement": {
+        "enabled": false,
+        "options": {
+          "enableTraffic": false
+        }
+      },
+      "type": "deployManifest"
+    },
+    {
+      "continuePipeline": false,
+      "failPipeline": true,
+      "job": "TAG/job/master",
+      "master": "my-jenkins-master",
+      "name": "Jenkins",
+      "parameters": {},
+      "refId": "7",
+      "requisiteStageRefIds": [
+        "5",
+        "6"
+      ],
+      "type": "jenkins",
+      "waitForCompletion": true
+    }
+  ],
+  "triggers": [
+    {
+      "enabled": true,
+      "job": "CI/job/master",
+      "master": "my-jenkins-master",
+      "propertyFile": "build.properties",
+      "type": "jenkins"
+    }
+  ],
+  "updateTs": "1581112598000"
+}

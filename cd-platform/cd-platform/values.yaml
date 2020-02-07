@@ -91,6 +91,9 @@ spinnaker:
   #    hosts:
   #      - domain.com
   halyard:
+    spinnakerVersion: 1.17.6
+    image:
+      tag: 1.31.0
     additionalServiceSettings:
       deck.yml:
         env:
@@ -98,6 +101,17 @@ spinnaker:
         kubernetes:
           securityContext:
             runAsUser: 0
+  kubeConfig:
+    enabled: true
+    secretName: my-kubeconfig
+    secretKey: config
+    contexts:
+      # Names of contexts available in the uploaded kubeconfig
+      - kind-kind
+      # This is the context from the list above that you would like
+      # to deploy Spinnaker itself to.
+    deploymentContext: kind-kind
+
 
 jenkins:
   fullnameOverride: jenkins

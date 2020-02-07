@@ -24,6 +24,12 @@
               <username>marcecaro</username>
               <password>DOCKERTOKEN</password>
             </com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl>
+            <com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl plugin="credentials@2.3.1">
+              <id>github_artifact_token</id>
+              <description></description>
+              <username>marcecaro</username>
+              <password>GITHUBTOKEN</password>
+            </com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl>
           </java.util.concurrent.CopyOnWriteArrayList>
         </entry>
       </domainCredentialsMap>

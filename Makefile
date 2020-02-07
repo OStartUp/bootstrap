@@ -42,6 +42,10 @@ package: cd-platform
 
 install:
 	@rm -f /tmp/cdplatform.yaml
+	-cp $$HOME/.kube/config /tmp/config_template
+	-sed "s/127.0.0.1:32772/kubernetes.default.svc.cluster.local/g" /tmp/config_template > /tmp/config
+	-kubectl delete secret my-kubeconfig -n $(NAMESPACE)
+	-kubectl create secret generic --from-file=/tmp/config my-kubeconfig -n $(NAMESPACE)
 	helm template cdplatform cd-platform/cd-platform-0.1.0.tgz -n $(NAMESPACE) -f cd-platform/parameters.yaml  > /tmp/cdplatform.yaml
 	kubectl apply -n $(NAMESPACE) -f /tmp/cdplatform.yaml
 	# cd cd-platform ; helm install --debug -n $(NAMESPACE) cdplatform cd-platform-0.1.0.tgz --timeout 600s -f parameters.yaml 
@@ -62,6 +66,8 @@ uninstall:
 	-@kubectl delete svc         -n $(NAMESPACE) -l release=cdplatform
 	-@kubectl delete ingress     -n $(NAMESPACE) -l release=cdplatform
 	-@kubectl delete statefulset -n $(NAMESPACE) -l release=cdplatform
+	-@kubectl delete statefulset -n $(NAMESPACE) -l app=spin
+	-@kubectl delete deployments -n $(NAMESPACE) -l app=spin
 
 postdeploy:
 	cd cd-platform ; ./postdeploy.sh $(NAMESPACE)

@@ -1,5 +1,6 @@
 CI.xml
 cd-platform*.tgz 
+.credentials
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

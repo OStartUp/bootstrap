@@ -18,6 +18,13 @@ help:
 kind:
 	./start-kind
 
+gitinfo:
+	@cd ../universe ;\
+	git fetch --tag ;\
+	echo "Current Production Commit (production_pointer)" ;\
+	git rev-parse --verify production_pointer 
+
+
 debug: int
 	kubectl delete deployment -l run=busybox
 	kubectl run busybox  --image=radial/busyboxplus:curl -i --tty
@@ -96,6 +103,6 @@ postdeploy: int
 list:
 	helm list --all-namespaces
 
-.PHONY: help kind kinddown package install uninstall postdeploy list int prod
+.PHONY: help kind kinddown package install uninstall postdeploy list int prod gitinfo
 
 # kubectl wait --for=condition=Ready pod/busybox1

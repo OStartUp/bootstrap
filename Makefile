@@ -54,7 +54,7 @@ package: cd-platform
 	cd cd-platform ; helm package cd-platform
 
 install:  int
-	@rm -f /tmp/cdplatform.yamlcd ..
+	@rm -f /tmp/cdplatform.yaml
 	#-kubectl config set-cluster kind-production --insecure-skip-tls-verify=true
 	-kubectl create namespace "echo-prod"
 	-kubectl create namespace "pet-prod"

@@ -58,6 +58,8 @@ install:  int
 	#-kubectl config set-cluster kind-production --insecure-skip-tls-verify=true
 	-kubectl create namespace "echo-prod"
 	-kubectl create namespace "pet-prod"
+	-kubectl create namespace "reflector-prod"
+	-kubectl create namespace "reflector"
 	-kubectl create namespace "echo"
 	-kubectl create namespace "pet"
 	-cp $$HOME/.kube/config /tmp/config_template

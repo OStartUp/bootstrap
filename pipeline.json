@@ -38,6 +38,26 @@
       },
       "useDefaultArtifact": true,
       "usePriorArtifact": false
+    },
+    {
+      "defaultArtifact": {
+        "artifactAccount": "OStartUp",
+        "id": "13a0d7bb-a553-46ce-a9b2-63443635e5d2",
+        "name": "reflector/manifest.yaml",
+        "reference": "https://api.github.com/repos/OStartUp/artifacts/contents/reflector/manifest.yaml",
+        "type": "github/file",
+        "version": ""
+      },
+      "displayName": "reflector_manifest",
+      "id": "e1d2c272-c8be-4f84-b1de-9d87acd74536",
+      "matchArtifact": {
+        "artifactAccount": "OStartUp",
+        "id": "90837172-be48-4631-b198-3865c40ab163",
+        "name": "reflector/manifest.yaml",
+        "type": "github/file"
+      },
+      "useDefaultArtifact": true,
+      "usePriorArtifact": false
     }
   ],
   "keepWaitingPipelines": false,
@@ -99,7 +119,8 @@
       "refId": "4",
       "requisiteStageRefIds": [
         "1",
-        "2"
+        "2",
+        "8"
       ],
       "type": "manualJudgment"
     },
@@ -154,17 +175,67 @@
     {
       "continuePipeline": false,
       "failPipeline": true,
-      "job": "TAG/job/master",
+      "job": "Tag/job/master",
       "master": "my-jenkins-master",
       "name": "Jenkins",
       "parameters": {},
       "refId": "7",
       "requisiteStageRefIds": [
         "5",
-        "6"
+        "6",
+        "9"
       ],
       "type": "jenkins",
       "waitForCompletion": true
+    },
+    {
+      "account": "kind-kind",
+      "cloudProvider": "kubernetes",
+      "manifestArtifact": null,
+      "manifestArtifactAccount": "OStartUp",
+      "manifestArtifactId": "e1d2c272-c8be-4f84-b1de-9d87acd74536",
+      "moniker": {
+        "app": "mainservice"
+      },
+      "name": "Deploy Reflector Service (Integration)",
+      "namespaceOverride": "reflector",
+      "refId": "8",
+      "requisiteStageRefIds": [],
+      "skipExpressionEvaluation": false,
+      "source": "artifact",
+      "trafficManagement": {
+        "enabled": false,
+        "options": {
+          "enableTraffic": false,
+          "services": []
+        }
+      },
+      "type": "deployManifest"
+    },
+    {
+      "account": "kind-kind",
+      "cloudProvider": "kubernetes",
+      "manifestArtifactAccount": "OStartUp",
+      "manifestArtifactId": "e1d2c272-c8be-4f84-b1de-9d87acd74536",
+      "moniker": {
+        "app": "mainservice"
+      },
+      "name": "Deploy Reflector Service (Production)",
+      "namespaceOverride": "reflector-prod",
+      "refId": "9",
+      "requisiteStageRefIds": [
+        "4"
+      ],
+      "skipExpressionEvaluation": false,
+      "source": "artifact",
+      "trafficManagement": {
+        "enabled": false,
+        "options": {
+          "enableTraffic": false,
+          "services": []
+        }
+      },
+      "type": "deployManifest"
     }
   ],
   "triggers": [
@@ -176,5 +247,5 @@
       "type": "jenkins"
     }
   ],
-  "updateTs": "1581112598000"
+  "updateTs": "1581274508000"
 }

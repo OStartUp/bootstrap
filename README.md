@@ -28,7 +28,8 @@ make install
 
 Remember to add registry in /etc/hosts:
 ```
-127.0.0.1       localhost  spinnaker spinnakergate
+127.0.0.1    localhost, api, spinnaker, spinnakergate, telemetry   (in linux no ',' )
+
 ```
 
 

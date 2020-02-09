@@ -36,6 +36,8 @@ kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -
 sleep 2
 kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config artifact github enable
 sleep 2
+kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config artifact http enable
+sleep 2
 kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal config artifact github account add $ARTIFACT_ACCOUNT_NAME  --token $GITHUBTOKEN
 sleep 2
 kubectl exec --namespace $NAMESPACE -it cdplatform-spinnaker-halyard-0 -- bash -C hal deploy apply

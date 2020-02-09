@@ -58,6 +58,24 @@
       },
       "useDefaultArtifact": true,
       "usePriorArtifact": false
+    },
+    {
+      "defaultArtifact": {
+        "artifactAccount": "no-auth-http-account",
+        "id": "3db7e59f-5671-4d80-94ff-3c28fd1a0804",
+        "reference": "https://raw.githubusercontent.com/OStartUp/artifacts/master/telemetry/manifest.yaml",
+        "type": "http/file"
+      },
+      "displayName": "telemetry_manifest_http",
+      "id": "7edda23a-0f07-4429-8ab2-aeae28f63278",
+      "matchArtifact": {
+        "artifactAccount": "no-auth-http-account",
+        "id": "45b7ff3f-2ef1-4094-aa66-84d475a8b5d6",
+        "reference": "https://raw.githubusercontent.com/OStartUp/artifacts/master/telemetry/manifest.yaml",
+        "type": "http/file"
+      },
+      "useDefaultArtifact": true,
+      "usePriorArtifact": false
     }
   ],
   "keepWaitingPipelines": false,
@@ -120,7 +138,8 @@
       "requisiteStageRefIds": [
         "1",
         "2",
-        "8"
+        "8",
+        "10"
       ],
       "type": "manualJudgment"
     },
@@ -191,7 +210,6 @@
     {
       "account": "kind-kind",
       "cloudProvider": "kubernetes",
-      "manifestArtifact": null,
       "manifestArtifactAccount": "OStartUp",
       "manifestArtifactId": "e1d2c272-c8be-4f84-b1de-9d87acd74536",
       "moniker": {
@@ -236,6 +254,31 @@
         }
       },
       "type": "deployManifest"
+    },
+    {
+      "account": "kind-kind",
+      "cloudProvider": "kubernetes",
+      "manifestArtifactAccount": "no-auth-http-account",
+      "manifestArtifactId": "7edda23a-0f07-4429-8ab2-aeae28f63278",
+      "moniker": {
+        "app": "mainservice"
+      },
+      "name": "Deploy Telemetry Service (Integration)",
+      "namespaceOverride": "telemetry",
+      "refId": "10",
+      "requiredArtifactIds": [],
+      "requiredArtifacts": [],
+      "requisiteStageRefIds": [],
+      "skipExpressionEvaluation": true,
+      "source": "artifact",
+      "trafficManagement": {
+        "enabled": false,
+        "options": {
+          "enableTraffic": false,
+          "services": []
+        }
+      },
+      "type": "deployManifest"
     }
   ],
   "triggers": [
@@ -247,5 +290,5 @@
       "type": "jenkins"
     }
   ],
-  "updateTs": "1581274508000"
+  "updateTs": "1581287318000"
 }

@@ -112,7 +112,8 @@ spinnaker:
       # This is the context from the list above that you would like
       # to deploy Spinnaker itself to.
     deploymentContext: kind-kind
-
+    omittedNameSpaces: []
+  
 
 jenkins:
   fullnameOverride: jenkins

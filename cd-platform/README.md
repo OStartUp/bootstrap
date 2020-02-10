@@ -13,7 +13,7 @@ helm package cd-platform
 
 Add the following new hosts
 ``` 
-127.0.0.1   spinnaker spinnakergate
+127.0.0.1    localhost, api, spinnaker, spinnakergate, telemetry, weave   (in linux no ',' )
 ```
 
 ```

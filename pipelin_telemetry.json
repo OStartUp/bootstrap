@@ -63,15 +63,15 @@
       "defaultArtifact": {
         "artifactAccount": "no-auth-http-account",
         "id": "3db7e59f-5671-4d80-94ff-3c28fd1a0804",
-        "reference": "https://raw.githubusercontent.com/OStartUp/artifacts/master/weave/manifest.yaml",
+        "reference": "https://raw.githubusercontent.com/OStartUp/artifacts/master/telemetry/manifest.yaml",
         "type": "http/file"
       },
-      "displayName": "weave_manifest_http",
+      "displayName": "telemetry_manifest_http",
       "id": "7edda23a-0f07-4429-8ab2-aeae28f63278",
       "matchArtifact": {
         "artifactAccount": "no-auth-http-account",
         "id": "45b7ff3f-2ef1-4094-aa66-84d475a8b5d6",
-        "reference": "https://raw.githubusercontent.com/OStartUp/artifacts/master/weave/manifest.yaml",
+        "reference": "https://raw.githubusercontent.com/OStartUp/artifacts/master/telemetry/manifest.yaml",
         "type": "http/file"
       },
       "useDefaultArtifact": true,
@@ -263,8 +263,8 @@
       "moniker": {
         "app": "mainservice"
       },
-      "name": "Deploy Weave Service (Integration)",
-      "namespaceOverride": "weave",
+      "name": "Deploy Telemetry Service (Integration)",
+      "namespaceOverride": "telemetry",
       "refId": "10",
       "requiredArtifactIds": [],
       "requiredArtifacts": [],
@@ -290,5 +290,5 @@
       "type": "jenkins"
     }
   ],
-  "updateTs": "1581300294000"
+  "updateTs": "1581287318000"
 }

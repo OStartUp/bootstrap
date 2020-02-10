@@ -56,15 +56,14 @@ package: cd-platform
 install:  int
 	@rm -f /tmp/cdplatform.yaml
 	#-kubectl config set-cluster kind-production --insecure-skip-tls-verify=true
-	-kubectl apply -n kube-system -f crds.yaml
+	#-kubectl apply -n kube-system -f crds.yaml
 	-kubectl create namespace "echo-prod"
 	-kubectl create namespace "pet-prod"
 	-kubectl create namespace "reflector-prod"
 	-kubectl create namespace "reflector"
 	-kubectl create namespace "echo"
 	-kubectl create namespace "pet"
-	-kubectl create namespace "telemetry"
-	-kubectl create namespace "telemetry-prod"
+	-kubectl create namespace "weave"
 	-cp $$HOME/.kube/config /tmp/config_template
 	-sed "s/127.0.0.1:/kubernetes.default.svc.cluster.local  #/g" /tmp/config_template > /tmp/config
 	-kubectl delete secret my-kubeconfig -n $(NAMESPACE)

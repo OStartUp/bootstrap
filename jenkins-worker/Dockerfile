@@ -47,7 +47,7 @@ RUN ./bazel-2.0.0-installer-linux-x86_64.sh
 # Installing HELM3
 RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
 RUN chmod 700 get_helm.sh
-RUN ./get_helm.sh
+RUN ./get_helm.sh --version v3.1.0-rc.1
 
 # Installing container-structure-test 
 RUN curl -LO https://storage.googleapis.com/container-structure-test/v1.8.0/container-structure-test-linux-amd64 

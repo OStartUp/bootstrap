@@ -56,6 +56,7 @@ package: cd-platform
 install:  int
 	@rm -f /tmp/cdplatform.yaml
 	#-kubectl config set-cluster kind-production --insecure-skip-tls-verify=true
+	-kubectl apply -n kube-system -f crds.yaml
 	-kubectl create namespace "echo-prod"
 	-kubectl create namespace "pet-prod"
 	-kubectl create namespace "reflector-prod"

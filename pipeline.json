@@ -136,10 +136,8 @@
       "notifications": [],
       "refId": "4",
       "requisiteStageRefIds": [
-        "1",
-        "2",
-        "8",
-        "10"
+        "16",
+        "17"
       ],
       "type": "manualJudgment"
     },
@@ -155,7 +153,7 @@
       "namespaceOverride": "echo-prod",
       "refId": "5",
       "requisiteStageRefIds": [
-        "4"
+        "11"
       ],
       "skipExpressionEvaluation": false,
       "source": "artifact",
@@ -179,7 +177,7 @@
       "namespaceOverride": "pet-prod",
       "refId": "6",
       "requisiteStageRefIds": [
-        "4"
+        "11"
       ],
       "skipExpressionEvaluation": false,
       "source": "artifact",
@@ -242,7 +240,7 @@
       "namespaceOverride": "reflector-prod",
       "refId": "9",
       "requisiteStageRefIds": [
-        "4"
+        "11"
       ],
       "skipExpressionEvaluation": false,
       "source": "artifact",
@@ -279,6 +277,86 @@
         }
       },
       "type": "deployManifest"
+    },
+    {
+      "name": "Notify Stake Holders",
+      "refId": "11",
+      "requisiteStageRefIds": [
+        "4"
+      ],
+      "type": "wait",
+      "waitTime": 1
+    },
+    {
+      "name": "Test Echo",
+      "refId": "12",
+      "requisiteStageRefIds": [
+        "1"
+      ],
+      "type": "wait",
+      "waitTime": 1
+    },
+    {
+      "name": "Test Pet",
+      "refId": "13",
+      "requisiteStageRefIds": [
+        "2"
+      ],
+      "type": "wait",
+      "waitTime": 1
+    },
+    {
+      "name": "Test Reflector",
+      "refId": "14",
+      "requisiteStageRefIds": [
+        "8"
+      ],
+      "type": "wait",
+      "waitTime": 1
+    },
+    {
+      "name": "Test Weave",
+      "refId": "15",
+      "requisiteStageRefIds": [
+        "10"
+      ],
+      "type": "wait",
+      "waitTime": 2
+    },
+    {
+      "name": "System Test API",
+      "refId": "16",
+      "requisiteStageRefIds": [
+        "12",
+        "13",
+        "14",
+        "15"
+      ],
+      "type": "wait",
+      "waitTime": 1
+    },
+    {
+      "name": "System Test User",
+      "refId": "17",
+      "requisiteStageRefIds": [
+        "12",
+        "13",
+        "14",
+        "15"
+      ],
+      "type": "wait",
+      "waitTime": 1
+    },
+    {
+      "name": "Notify New Version",
+      "refId": "18",
+      "requisiteStageRefIds": [
+        "9",
+        "5",
+        "6"
+      ],
+      "type": "wait",
+      "waitTime": 1
     }
   ],
   "triggers": [
@@ -290,5 +368,5 @@
       "type": "jenkins"
     }
   ],
-  "updateTs": "1581364100000"
+  "updateTs": "1581365264000"
 }

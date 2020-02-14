@@ -52,7 +52,7 @@ kubectl config use-context kind-kind
 
 killall kubectl || true
 kubectl apply -f nginx-ingress-controller.yaml
-kubectl apply -f docker-service.yaml -n kube-system
+#kubectl apply -f docker-service.yaml -n kube-system
 sleep 60
 kubectl port-forward -n ingress-nginx  svc/ingress-nginx 8080:80 > /dev/null 2>&1 &
 kubectl port-forward -n ingress-nginx  svc/ingress-nginx 8443:443 > /dev/null 2>&1  &

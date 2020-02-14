@@ -3,9 +3,6 @@
   <actions/>
   <description></description>
   <properties>
-    <org.csanchez.jenkins.plugins.kubernetes.KubernetesFolderProperty plugin="kubernetes@1.21.2">
-      <permittedClouds/>
-    </org.csanchez.jenkins.plugins.kubernetes.KubernetesFolderProperty>
     <org.jenkinsci.plugins.pipeline.modeldefinition.config.FolderConfig plugin="pipeline-model-definition@1.5.1">
       <dockerLabel></dockerLabel>
       <registry plugin="docker-commons@1.16"/>
@@ -49,6 +46,6 @@
   </sources>
   <factory class="org.jenkinsci.plugins.workflow.multibranch.WorkflowBranchProjectFactory">
     <owner class="org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject" reference="../.."/>
-    <scriptPath>JenkinsfileTest</scriptPath>
+    <scriptPath>.ci/JenkinsfileTest</scriptPath>
   </factory>
 </org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject>

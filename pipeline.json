@@ -76,6 +76,25 @@
       },
       "useDefaultArtifact": true,
       "usePriorArtifact": false
+    },
+    {
+      "defaultArtifact": {
+        "artifactAccount": "OStartUp",
+        "id": "89f940c2-a087-42e7-beeb-ed3437344fc7",
+        "name": "test/manifest.yaml",
+        "reference": "https://api.github.com/repos/OStartUp/artifacts/contents/test/manifest.yaml",
+        "type": "github/file"
+      },
+      "displayName": "test_manifest",
+      "id": "8946474c-a1bf-4447-9b72-0f59b7409b1f",
+      "matchArtifact": {
+        "artifactAccount": "OStartUp",
+        "id": "dcba513e-6c32-4938-bbd7-b1fb6306b810",
+        "name": "test/manifest.yaml",
+        "type": "github/file"
+      },
+      "useDefaultArtifact": true,
+      "usePriorArtifact": false
     }
   ],
   "keepWaitingPipelines": false,
@@ -357,6 +376,30 @@
       ],
       "type": "wait",
       "waitTime": 1
+    },
+    {
+      "account": "kind-kind",
+      "cloudProvider": "kubernetes",
+      "manifestArtifact": null,
+      "manifestArtifactAccount": "OStartUp",
+      "manifestArtifactId": "8946474c-a1bf-4447-9b72-0f59b7409b1f",
+      "moniker": {
+        "app": "mainservice"
+      },
+      "name": "Deploy Echo Service (Integration)",
+      "namespaceOverride": "test",
+      "refId": "19",
+      "requisiteStageRefIds": [],
+      "skipExpressionEvaluation": false,
+      "source": "artifact",
+      "trafficManagement": {
+        "enabled": false,
+        "options": {
+          "enableTraffic": false,
+          "services": []
+        }
+      },
+      "type": "deployManifest"
     }
   ],
   "triggers": [

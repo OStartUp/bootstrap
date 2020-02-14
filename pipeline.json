@@ -155,8 +155,7 @@
       "notifications": [],
       "refId": "4",
       "requisiteStageRefIds": [
-        "16",
-        "17"
+        "20"
       ],
       "type": "manualJudgment"
     },
@@ -343,30 +342,6 @@
       "waitTime": 2
     },
     {
-      "name": "System Test API",
-      "refId": "16",
-      "requisiteStageRefIds": [
-        "12",
-        "13",
-        "14",
-        "15"
-      ],
-      "type": "wait",
-      "waitTime": 1
-    },
-    {
-      "name": "System Test User",
-      "refId": "17",
-      "requisiteStageRefIds": [
-        "12",
-        "13",
-        "14",
-        "15"
-      ],
-      "type": "wait",
-      "waitTime": 1
-    },
-    {
       "name": "Notify New Version",
       "refId": "18",
       "requisiteStageRefIds": [
@@ -380,13 +355,12 @@
     {
       "account": "kind-kind",
       "cloudProvider": "kubernetes",
-      "manifestArtifact": null,
       "manifestArtifactAccount": "OStartUp",
       "manifestArtifactId": "8946474c-a1bf-4447-9b72-0f59b7409b1f",
       "moniker": {
         "app": "mainservice"
       },
-      "name": "Deploy Echo Service (Integration)",
+      "name": "Deploy System Test Service",
       "namespaceOverride": "test",
       "refId": "19",
       "requisiteStageRefIds": [],
@@ -400,6 +374,23 @@
         }
       },
       "type": "deployManifest"
+    },
+    {
+      "continuePipeline": false,
+      "failPipeline": true,
+      "job": "Test/job/master",
+      "master": "my-jenkins-master",
+      "name": "System Test API",
+      "parameters": {},
+      "refId": "20",
+      "requisiteStageRefIds": [
+        "19",
+        "12",
+        "13",
+        "14",
+        "15"
+      ],
+      "type": "jenkins"
     }
   ],
   "triggers": [
@@ -411,5 +402,5 @@
       "type": "jenkins"
     }
   ],
-  "updateTs": "1581365264000"
+  "updateTs": "1581712300000"
 }

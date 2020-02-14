@@ -64,6 +64,7 @@ install:  int
 	-kubectl create namespace "echo"
 	-kubectl create namespace "pet"
 	-kubectl create namespace "weave"
+	-kubectl create namespace "test"
 	-cp $$HOME/.kube/config /tmp/config_template
 	-sed "s/127.0.0.1:/kubernetes.default.svc.cluster.local  #/g" /tmp/config_template > /tmp/config
 	-kubectl delete secret my-kubeconfig -n $(NAMESPACE)
